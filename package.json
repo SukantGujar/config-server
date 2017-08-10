@@ -1,0 +1,26 @@
+{
+  "name": "config-server",
+  "version": "0.1.0",
+  "description": "A simple json configuration manager, intended to be used as a shared configuration safe in a multi-app environment.",
+  "main": "server",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack -p",
+    "start": "node server/index.js"
+  },
+  "keywords": [
+    "configuration",
+    "centralized",
+    "consul"
+  ],
+  "author": "Sukant Gujar",
+  "license": "MIT",
+  "dependencies": {
+    "bluebird": "^3.5.0",
+    "body-parser": "^1.17.2",
+    "express": "^4.15.4",
+    "lodash": "^4.17.4",
+    "minimist": "^1.2.0",
+    "mongodb": "^2.2.31"
+  }
+}
