@@ -59,8 +59,13 @@ getConfig = ({read = DEFAULT_READ_FILTER})=>{
 },
 saveConfig = ({read = DEFAULT_READ_FILTER, write = DEFAULT_WRITE_FILTER}, configChanges) =>{
   let filteredChanges = applyFilter(configChanges, write);
-  newConfig = Object.assign({}, config, filteredChanges);
-  saveCoreConfig(newConfig);
+  if (_.size(filteredChanges)){
+    newConfig = Object.assign({}, config, filteredChanges);
+    saveCoreConfig(newConfig);
+  }
+  else{
+    console.info('Config not updated (no effective changes survived write filter).');
+  }
   return getConfig({read});
 },
 init = (dbInstance)=> {
