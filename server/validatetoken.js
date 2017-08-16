@@ -9,8 +9,7 @@ authError = function(res, token = null){
   return false;
 },
 
-tokenProvider = require("./tokenprovider"),
-tokensApi = null,
+{api: tokensApi} = require("./routes/tokens/tokenprovider"),
 
 isMasterToken = (tokenKey) => {
   const masterToken = tokensApi.getMasterToken();
@@ -33,10 +32,6 @@ validator = (validator) => (req, res, next) =>{
   req.Token = token;
   return next();
 };
-
-tokenProvider.init().then(
-  api => tokensApi = api
-);
 
 module.exports = {
   "admin" : validator(isMasterToken),

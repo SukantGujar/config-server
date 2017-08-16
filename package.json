@@ -19,6 +19,8 @@
     "bluebird": "^3.5.0",
     "body-parser": "^1.17.2",
     "express": "^4.15.4",
+    "express-graceful-exit": "^0.4.0",
+    "json-property-filter": "^1.2.0",
     "lodash": "^4.17.4",
     "minimist": "^1.2.0",
     "mongodb": "^2.2.31"

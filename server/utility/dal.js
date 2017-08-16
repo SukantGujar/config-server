@@ -1,17 +1,19 @@
 let 
 client = require("mongodb").MongoClient,
 DB_URL = process.env["DB_URL"],
+//TODO: Remove mongoclient mock
 //db = null,
 
 db = {
   collection : () => ({
       "find" : () => ({
-        toArray: ()=>Promise.resolve([]) 
+        toArray: ()=>(Promise.resolve([])) 
       }),
-      "save" : ()=>{},
-      "deleteOne" : ()=>{}
+      "findOne": ()=>(Promise.resolve({})),
+      "save" : ()=>(Promise.resolve({})),
+      "deleteOne" : ()=>(Promise.resolve({}))
   })
-}
+},
 
 init = ()=>{
   if (db){
@@ -31,6 +33,9 @@ init = ()=>{
     console.error(`DB_URL: ${DB_URL}`);
     Promise.reject(err);
   });
-}
+};
 
-module.exports = {init};
+module.exports = {
+  init,
+  getDb:()=>db
+};

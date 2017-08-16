@@ -44,6 +44,10 @@ bytes@2.4.0:
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/bytes/-/bytes-2.4.0.tgz#7d97196f9d5baf7f6935e25985549edd2a6c2339"
 
+commander@^2.9.0:
+  version "2.11.0"
+  resolved "https://registry.yarnpkg.com/commander/-/commander-2.11.0.tgz#157152fd1e7a6c8d98a5b715cf376df928004563"
+
 content-disposition@0.5.2:
   version "0.5.2"
   resolved "https://registry.yarnpkg.com/content-disposition/-/content-disposition-0.5.2.tgz#0cf68bb9ddf5f2be7961c3a85178cb85dba78cb4"
@@ -103,6 +107,12 @@ escape-html@~1.0.3:
 etag@~1.8.0:
   version "1.8.0"
   resolved "https://registry.yarnpkg.com/etag/-/etag-1.8.0.tgz#6f631aef336d6c46362b51764044ce216be3c051"
+
+express-graceful-exit@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/express-graceful-exit/-/express-graceful-exit-0.4.0.tgz#c0143cc698f9dbd0f1284a1ca2433f049f83c4f3"
+  dependencies:
+    underscore "^1.4.4"
 
 express@^4.15.4:
   version "4.15.4"
@@ -181,6 +191,12 @@ ipaddr.js@1.4.0:
 isarray@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/isarray/-/isarray-1.0.0.tgz#bb935d48582cba168c06834957a54a3e07124f11"
+
+json-property-filter@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/json-property-filter/-/json-property-filter-1.2.0.tgz#994710a5b1684f3d9ed16f909d2c468981e6b280"
+  dependencies:
+    commander "^2.9.0"
 
 lodash@^4.17.4:
   version "4.17.4"
@@ -362,6 +378,10 @@ type-is@~1.6.15:
   dependencies:
     media-typer "0.3.0"
     mime-types "~2.1.15"
+
+underscore@^1.4.4:
+  version "1.8.3"
+  resolved "https://registry.yarnpkg.com/underscore/-/underscore-1.8.3.tgz#4f3fb53b106e6097fcf9cb4109f2a5e9bdfa5022"
 
 unpipe@1.0.0, unpipe@~1.0.0:
   version "1.0.0"
