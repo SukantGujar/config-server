@@ -2,6 +2,8 @@ let express = require("express"),
 bodyParser = require("body-parser"),
 args = require("minimist")(process.argv.slice(2)),
 gracefulExit = require('express-graceful-exit'),
+path = require("path"),
+compression = require("compression"),
 app = express(),
 {BIND_ADDRESS_KEY, BIND_PORT_KEY, DEFAULT_BIND_ADDRESS, DEFAULT_BIND_PORT} = require("./utility/constants"),
 host = args[BIND_ADDRESS_KEY] || process.env[BIND_ADDRESS_KEY] || DEFAULT_BIND_ADDRESS,
@@ -15,6 +17,11 @@ port = args[BIND_PORT_KEY] || process.env[BIND_PORT_KEY] || DEFAULT_BIND_PORT,
 dbInit().then((db)=>Promise.all([tokenInit(db), configInit(db)])).then(
   ()=>{
     app.use(gracefulExit.middleware(app));
+
+    app.use(compression());
+
+    app.use("/ui/", express.static(path.resolve(__dirname + "/../ui/")));
+    app.use("/ui/*", express.static(path.resolve(__dirname + "/../ui/index.html")));
     
     app.use(bodyParser.json());
     
