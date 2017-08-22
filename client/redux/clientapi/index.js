@@ -22,7 +22,7 @@ module.exports = {
     deleteToken : (key, token)=>tokensApi.delete(`/${token}`, useAuth(key)).then(extractData)
   },
   "configApi" : {
-    loadConfig : (key) => configApi.get('/', useAuth(key)),
+    loadConfig : (key) => configApi.get('/', useAuth(key)).then(extractData),
     saveConfig : (key, config) => configApi.put('/', config, useAuth(key)).then(extractData)
   }
 };

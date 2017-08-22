@@ -41,8 +41,12 @@ TabContainer.propTypes = {
 const styles = theme => ({
   root: {
     flexGrow: 1,
-    margin: theme.spacing.unit*4,
+    margin: 0,
     backgroundColor: theme.palette.background.paper,
+  },
+  toolbar : {
+    alignItems : "center",
+    justifyContent : "center" 
   },
   tabLink : {
     display:"flex",
@@ -76,7 +80,7 @@ class Chrome extends Component {
     return (
       <div className={classes.root}>
         <AppBar position="static">
-          <Toolbar>
+          <Toolbar className={classes.toolbar}>
             <Tabs value={location.pathname} onChange={(event, value)=>value}>
               {
                 tabs.map(
@@ -90,7 +94,17 @@ class Chrome extends Component {
                   <InputLabel htmlFor="apiKey" classes={{root: classes.keyLabel}}>API Key</InputLabel>
                 </Grid>
                 <Grid item>
-                  <Input inputRef={(input)=>this.keyInput = input} id="apiKey" classes={{input : classes.input}} disableUnderline={true} />
+                  <Input 
+                    inputRef={(input)=>{
+                      this.keyInput = input;
+                      input.setAttribute("autocorrect", false);
+                      input.setAttribute("spellcheck", false);
+                    }} 
+                    id="apiKey" 
+                    classes={{input : classes.input}} 
+                    disableUnderline={true}
+                    placeholder="Type your API Key here and click Apply." 
+                  />
                 </Grid>
                 <Grid item>
                   <Button 
@@ -107,12 +121,20 @@ class Chrome extends Component {
             </Grid>
           </Toolbar>
         </AppBar>
-        <Route exact path='/' component={()=><TabContainer>
-            {ConfigEditor()}
-          </TabContainer>} />
-        <Route path='/keys' component={()=><TabContainer>
-            <KeyEditor editedKey={e} />
-          </TabContainer>} />
+        <Grid container align="center" justify="center" >
+          <Grid item xl={6}>
+            <Route exact path='/' component={
+              ()=><TabContainer>
+                <ConfigEditor />
+              </TabContainer>} 
+            />
+            <Route path='/keys' component={
+              ()=><TabContainer>
+                <KeyEditor editedKey={e} />
+              </TabContainer>} 
+            />
+          </Grid>
+        </Grid>
       </div>
     );
   }
