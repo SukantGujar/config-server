@@ -12,7 +12,7 @@ db = null,
   DEFAULT_READ_FILTER,
   DEFAULT_WRITE_FILTER
 } = require("../../utility/constants"),
-MASTER_TOKEN = args[MASTER_TOKEN_KEY] || process.env[MASTER_TOKEN_KEY] || "WQDFDQWESDFASDFASDFSADF",
+MASTER_TOKEN = args[MASTER_TOKEN_KEY] || process.env[MASTER_TOKEN_KEY] || "abcd",
 getTokens = ()=>{
   return tokens;
 }
@@ -83,6 +83,8 @@ const api = {
   makeTokenInstance,
   saveToken
 };
+
+console.info(`MASTER Token is: ${MASTER_TOKEN}`);
 
 module.exports = {
   init,

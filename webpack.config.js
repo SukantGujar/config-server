@@ -2,7 +2,8 @@ const webpack = require('webpack');
 const path = require('path');
 
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin'),
-HtmlWebpackPlugin = require('html-webpack-plugin');
+HtmlWebpackPlugin = require('html-webpack-plugin'),
+CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
 	devtool: "sourcemap",
@@ -33,7 +34,8 @@ module.exports = {
 				options: {
 					presets: ['es2015', 'react'],
 					plugins: [
-						["transform-class-properties", { "spec": true }]
+						["transform-class-properties", { "spec": true }],
+						["transform-object-rest-spread", { "useBuiltIns": true }]
 					]
 				}
 			}
@@ -41,6 +43,12 @@ module.exports = {
 	},
 
 	plugins: [
+		new CopyWebpackPlugin([
+			{
+				from : "node_modules/monaco-editor/min/vs",
+				to : "vs"
+			}
+		]),
 		new HtmlWebpackPlugin({
 			"template" : "./client/assets/index.html"
 		})

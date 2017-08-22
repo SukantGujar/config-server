@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import _ from 'lodash';
+import {connect} from 'react-redux';
 import { withStyles } from 'material-ui/styles';
 import AppBar from 'material-ui/AppBar';
 import Tabs, { Tab } from 'material-ui/Tabs';
@@ -17,6 +19,13 @@ import {
 
 import {withRouter} from 'react-router';
 
+import ConfigEditor from '../configeditor';
+import KeyEditor from '../keyeditor';
+
+import searchParser from '../utility/searchparser';
+
+import {actions} from '../redux';
+
 function TabContainer(props) {
   return (
     <div style={{ padding: 20 }}>
@@ -32,7 +41,7 @@ TabContainer.propTypes = {
 const styles = theme => ({
   root: {
     flexGrow: 1,
-    margin: theme.spacing.unit,
+    margin: theme.spacing.unit*4,
     backgroundColor: theme.palette.background.paper,
   },
   tabLink : {
@@ -55,8 +64,15 @@ const styles = theme => ({
   }
 });
 
-function Chrome({location, classes, tabs}) {
-  console.log(location)
+class Chrome extends Component {
+  render(){
+    let {location, classes, tabs, isMaster, onApplyKeyClick} = this.props;
+  
+    const {e} = searchParser(location.search);
+    if (!isMaster){
+      const [first, second] = tabs;
+      tabs = [first];
+    }
     return (
       <div className={classes.root}>
         <AppBar position="static">
@@ -74,28 +90,46 @@ function Chrome({location, classes, tabs}) {
                   <InputLabel htmlFor="apiKey" classes={{root: classes.keyLabel}}>API Key</InputLabel>
                 </Grid>
                 <Grid item>
-                  <Input id="apiKey" classes={{input : classes.input}} disableUnderline={true} />
+                  <Input inputRef={(input)=>this.keyInput = input} id="apiKey" classes={{input : classes.input}} disableUnderline={true} />
                 </Grid>
                 <Grid item>
-                  <Button color="contrast">Apply</Button>
+                  <Button 
+                    color="contrast" 
+                    onClick={
+                      (e)=>{
+                        onApplyKeyClick(this.keyInput.value)
+                      }
+                    }>
+                    Apply
+                  </Button>
                 </Grid>
               </Grid>
             </Grid>
           </Toolbar>
         </AppBar>
         <Route exact path='/' component={()=><TabContainer>
-            {'Item One'}
+            {ConfigEditor()}
           </TabContainer>} />
         <Route path='/keys' component={()=><TabContainer>
-            {'Item Two'}
+            <KeyEditor editedKey={e} />
           </TabContainer>} />
       </div>
     );
+  }
 }
 
 Chrome.propTypes = {
   classes: PropTypes.object.isRequired,
-  tabs: PropTypes.array.isRequired
+  tabs: PropTypes.array.isRequired,
+  isMaster : PropTypes.bool.isRequired,
+  onApplyKeyClick : PropTypes.func.isRequired
 };
 
-export default withRouter(withStyles(styles)(Chrome));
+const mapStateToProps = state => ({
+  "isMaster" : state.currentKeyIsMaster
+}),
+mapDispatchToProps = dispatch => ({
+  onApplyKeyClick: (key)=>dispatch(actions.setupSessionAsync(_.trim(key)))
+});
+
+export default withRouter(withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(Chrome)));

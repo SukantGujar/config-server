@@ -20,14 +20,14 @@ dbInit().then((db)=>Promise.all([tokenInit(db), configInit(db)])).then(
 
     app.use(compression());
 
-    app.use("/ui/", express.static(path.resolve(__dirname + "/../ui/")));
-    app.use("/ui/*", express.static(path.resolve(__dirname + "/../ui/index.html")));
-    
     app.use(bodyParser.json());
     
     app.use("/api/tokens", admin, tokens);
     
     app.use("/api/config", authorized, config);
+    
+    app.use("/ui/", express.static(path.resolve(__dirname + "/../ui/")));
+    app.use("/ui/*", express.static(path.resolve(__dirname + "/../ui/index.html")));
     
     let server = app.listen(port, host);
     
