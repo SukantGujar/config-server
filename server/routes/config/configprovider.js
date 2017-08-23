@@ -2,6 +2,7 @@ let
 _ = require("lodash"),
 Promise = require("bluebird"),
 jpf = require("json-property-filter"),
+jsondiffpatch = require("jsondiffpatch").create(),
 db = null,
 {CONFIG_KEY, DEFAULT_READ_FILTER, DEFAULT_WRITE_FILTER} = require("../../utility/constants"),
 testConfig = {
@@ -47,6 +48,7 @@ saveCoreConfig = (coreConfig)=>{
   .save(coreConfig)
   .then(()=>console.info(`Config updated.`))
   .catch(console.error);
+  delete coreConfig["_id"];
   config = coreConfig;
   return config;
 },
@@ -58,14 +60,22 @@ getConfig = ({read = DEFAULT_READ_FILTER})=>{
   return applyFilter(config, read);
 },
 saveConfig = ({read = DEFAULT_READ_FILTER, write = DEFAULT_WRITE_FILTER}, configChanges) =>{
-  let filteredChanges = applyFilter(configChanges, write);
-  if (_.size(filteredChanges)){
-    newConfig = Object.assign({}, config, filteredChanges);
-    saveCoreConfig(newConfig);
-  }
-  else{
-    console.info('Config not updated (no effective changes survived write filter).');
-  }
+  // For saving the changes, the formula is -
+  // newConfig = (baseConfig - filteredConfig) + filteredNewChanges
+  // where 
+  //  baseConfig is the current stored config.
+  //  filteredConfig is the result of applying write filter to the baseConfig
+  //  filteredNewChanges are the config changes submitted by the user with write filter applied.
+  let
+  baseConfig = Object.assign({}, config), 
+  filteredConfig = applyFilter(config, write),
+  filteredNewChanges = applyFilter(configChanges, write),
+  delta = jsondiffpatch.diff(baseConfig, filteredConfig),
+  revDelta = jsondiffpatch.reverse(delta),
+  inverseBaseConfig = jsondiffpatch.patch({}, revDelta),
+  newConfig = Object.assign({}, inverseBaseConfig, filteredNewChanges);
+  saveCoreConfig(newConfig);
+
   return getConfig({read});
 },
 init = (dbInstance)=> {

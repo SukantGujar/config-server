@@ -39,6 +39,7 @@ class ConfigEditor extends Component {
         <Grid item>
         <MonacoEditor
           height="500"
+          width="800"
           language="json"
           theme="vs-dark"
           value={JSON.stringify(config,null,2)}

@@ -46,7 +46,7 @@ const styles = theme => ({
   },
   toolbar : {
     alignItems : "center",
-    justifyContent : "center" 
+    justifyContent : "center"
   },
   tabLink : {
     display:"flex",
@@ -122,7 +122,7 @@ class Chrome extends Component {
           </Toolbar>
         </AppBar>
         <Grid container align="center" justify="center" >
-          <Grid item xl={6}>
+          <Grid item>
             <Route exact path='/' component={
               ()=><TabContainer>
                 <ConfigEditor />
