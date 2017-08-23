@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent as Component } from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import {connect} from 'react-redux';
@@ -11,10 +11,12 @@ import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
 import Grid from 'material-ui/Grid';
 import Button from 'material-ui/Button';
+import StarIcon from 'material-ui-icons/Star';
 
 import {
   Route,
-  Link
+  Link,
+  Switch
 } from 'react-router-dom';
 
 import {withRouter} from 'react-router';
@@ -25,6 +27,17 @@ import KeyEditor from '../keyeditor';
 import searchParser from '../utility/searchparser';
 
 import {actions} from '../redux';
+
+const defaultTabs = [
+  {
+    "label" : "config",
+    "path" : ""
+  },
+  {
+    "label" : "keys",
+    "path" : "/keys"
+  }
+];
 
 function TabContainer(props) {
   return (
@@ -61,16 +74,35 @@ const styles = theme => ({
   },
   input: {
     width: 300,
-    color: "white"
+    color: "white",
+    display: "flex",
+    alignItems: "center"
+  },
+  star: {
+    height:30,
+    width:30,
+    marginRight:10
   },
   keyLabel : {
     color:  "white"
   }
 });
 
+const renderTabs = _.curry((tabs, classes, {location, match}) => {
+  return(
+  <Tabs value={`${location.pathname}`} onChange={(event, value)=>value}>
+  {
+    tabs.map(
+      ({label, path})=><Tab key={label} label={label} value={`${match.url}${path}`} className={classes.tabLink} component={Link} to={`${match.url}${path}`} />
+    )
+  }
+  </Tabs>
+  )});
+
 class Chrome extends Component {
   render(){
-    let {location, classes, tabs, isMaster, onApplyKeyClick} = this.props;
+    let {location, classes, isMaster, onApplyKeyClick, match, history} = this.props,
+    tabs = defaultTabs;
   
     const {e} = searchParser(location.search);
     if (!isMaster){
@@ -81,60 +113,89 @@ class Chrome extends Component {
       <div className={classes.root}>
         <AppBar position="static">
           <Toolbar className={classes.toolbar}>
-            <Tabs value={location.pathname} onChange={(event, value)=>value}>
-              {
-                tabs.map(
-                  ({label, path})=><Tab key={label} label={label} value={path} className={classes.tabLink} component={Link} to={path} />
-                )
-              }
-            </Tabs>
+            <Route path={`${match.url}:key`} render={renderTabs(tabs, classes)} />
             <Grid item>
               <Grid container align="center" justify="space-between" className={classes.apiKey}>
                 <Grid item style={{cursor:"default"}}>
                   <InputLabel htmlFor="apiKey" classes={{root: classes.keyLabel}}>API Key</InputLabel>
                 </Grid>
                 <Grid item>
-                  <Input 
-                    inputRef={(input)=>{
-                      this.keyInput = input;
-                      input.setAttribute("autocorrect", false);
-                      input.setAttribute("spellcheck", false);
-                    }} 
-                    id="apiKey" 
-                    classes={{input : classes.input}} 
-                    disableUnderline={true}
-                    placeholder="Type your API Key here and click Apply." 
-                  />
+                  <Switch>
+                    <Route exact path={`${match.url}`} render={()=>(
+                      <Input 
+                        inputRef={(input)=>{
+                          if (!input){
+                            return;
+                          }
+                          this.keyInput = input;
+                          input.setAttribute("autocorrect", false);
+                          input.setAttribute("spellcheck", false);
+                          input.focus();
+                        }}
+                        onKeyPress={e=>{
+                          if (e.key == 'Enter'){
+                            e.preventDefault();
+                            onApplyKeyClick(this.keyInput.value, history);
+                            return;
+                          }
+                        }}
+                        id="apiKey"
+                        classes={{input : classes.input}} 
+                        disableUnderline={true}
+                        placeholder="Type your API Key here and click Apply." 
+                      />
+                    )} />
+                    <Route path={`${match.url}:key`} render={({match})=>(
+                      <InputLabel classes={{root : classes.input}}>{isMaster && <StarIcon titleAccess="Master Key" className={classes.star} />}{match.params.key}</InputLabel>
+                    )} />
+                  </Switch>
                 </Grid>
                 <Grid item>
-                  <Button 
-                    color="contrast" 
-                    onClick={
-                      (e)=>{
-                        onApplyKeyClick(this.keyInput.value)
-                      }
-                    }>
-                    Apply
-                  </Button>
+                <Switch>
+                    <Route exact path={`${match.url}`} render={({history})=>(
+                      <Button 
+                      color="contrast" 
+                      onClick={
+                        (e)=>{
+                          onApplyKeyClick(this.keyInput.value, history);
+                        }
+                      }>
+                      Apply
+                    </Button>
+                    )} />
+                    <Route path={`${match.url}:key`} render={({match, history})=>(
+                      <Button 
+                        color="contrast" 
+                        onClick={
+                          (e)=>{
+                            history.push("/");
+                          }
+                        }>
+                        Change
+                      </Button>
+                    )} />
+                  </Switch>
                 </Grid>
               </Grid>
             </Grid>
           </Toolbar>
         </AppBar>
-        <Grid container align="center" justify="center" >
+        <Route path={`${match.url}:key`} render = {({match})=>(
+          <Grid container align="center" justify="center" >
           <Grid item>
-            <Route exact path='/' component={
+            <Route exact path={`${match.url}`} render={
               ()=><TabContainer>
                 <ConfigEditor />
               </TabContainer>} 
             />
-            <Route path='/keys' component={
-              ()=><TabContainer>
-                <KeyEditor editedKey={e} />
+            <Route path={`${match.url}/keys`} render={
+              ({match})=><TabContainer>
+                <KeyEditor editedKey={match.params.key} />
               </TabContainer>} 
             />
           </Grid>
         </Grid>
+        )} />
       </div>
     );
   }
@@ -142,7 +203,6 @@ class Chrome extends Component {
 
 Chrome.propTypes = {
   classes: PropTypes.object.isRequired,
-  tabs: PropTypes.array.isRequired,
   isMaster : PropTypes.bool.isRequired,
   onApplyKeyClick : PropTypes.func.isRequired
 };
@@ -151,7 +211,10 @@ const mapStateToProps = state => ({
   "isMaster" : state.currentKeyIsMaster
 }),
 mapDispatchToProps = dispatch => ({
-  onApplyKeyClick: (key)=>dispatch(actions.setupSessionAsync(_.trim(key)))
+  onApplyKeyClick: (key, history)=>{
+    dispatch(actions.setupSessionAsync(_.trim(key)))
+    history.push(`/${key}`);
+  }
 });
 
 export default withRouter(withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(Chrome)));
