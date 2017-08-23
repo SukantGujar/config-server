@@ -34,6 +34,8 @@ module.exports = {
 				options: {
 					presets: ['es2015', 'react'],
 					plugins: [
+						["transform-async-to-generator"],
+						["syntax-async-functions"],
 						["transform-class-properties", { "spec": true }],
 						["transform-object-rest-spread", { "useBuiltIns": true }]
 					]
