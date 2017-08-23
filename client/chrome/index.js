@@ -12,6 +12,7 @@ import Typography from 'material-ui/Typography';
 import Grid from 'material-ui/Grid';
 import Button from 'material-ui/Button';
 import StarIcon from 'material-ui-icons/Star';
+import SettingsIcon from 'material-ui-icons/Settings';
 
 import {
   Route,
@@ -56,6 +57,7 @@ const styles = theme => ({
     flexGrow: 1,
     margin: 0,
     backgroundColor: theme.palette.background.paper,
+    overflow: "hidden"
   },
   toolbar : {
     alignItems : "center",
@@ -85,6 +87,11 @@ const styles = theme => ({
   },
   keyLabel : {
     color:  "white"
+  },
+  settingsIcon :{
+    fill : "#eee",
+    height : 600,
+    width : 600
   }
 });
 
@@ -193,6 +200,13 @@ class Chrome extends Component {
                 <KeyEditor editedKey={match.params.key} />
               </TabContainer>} 
             />
+          </Grid>
+        </Grid>
+        )} />
+        <Route exact path={`${match.url}`} render = {({match})=>(
+          <Grid container align="center" justify="center" >
+          <Grid item>
+            <SettingsIcon className={classes.settingsIcon} />
           </Grid>
         </Grid>
         )} />
