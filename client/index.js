@@ -20,24 +20,14 @@ const theme = createMuiTheme({
       bottomLine : "white"
     }
   })
-}),
-tabs = [
-  {
-    "label" : "config",
-    "path" : "/"
-  },
-  {
-    "label" : "keys",
-    "path" : "/keys"
-  }
-];
+});
 
 function App() {
   return (
     <Router basename="/ui/">
       <MuiThemeProvider theme={theme}>
         <Provider store={store}>
-          <Chrome tabs={tabs} />
+          <Chrome />
         </Provider>
       </MuiThemeProvider>
     </Router>
