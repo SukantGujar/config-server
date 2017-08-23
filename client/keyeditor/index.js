@@ -21,8 +21,7 @@ import {actions} from '../redux';
 
 const styles = theme => ({
   root: {
-    width: '100%',
-    maxWidth: 600,
+    width: 600,
     backgroundColor: "white",
   },
   star:{
