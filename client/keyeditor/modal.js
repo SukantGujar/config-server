@@ -108,4 +108,4 @@ KeyEditorDialog.propTypes = {
   ok : PropTypes.func
 }
 
-module.exports = withStyles(styles)(KeyEditorDialog);
+export default withStyles(styles)(KeyEditorDialog);

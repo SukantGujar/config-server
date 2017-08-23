@@ -1,6 +1,6 @@
 import {tokensApi, configApi} from '../clientapi';
 
-module.exports = {
+const actions = {
   saveConfig: function(config){
     return ({
     type: "SAVE_CONFIG",
@@ -165,3 +165,5 @@ module.exports = {
     }
   }
 };
+
+export default actions;

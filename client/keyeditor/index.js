@@ -159,4 +159,4 @@ KeyEditor.propTypes = {
   "history" : PropTypes.object.isRequired
 }
 
-module.exports = withRouter(withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(KeyEditor)));
+export default withRouter(withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(KeyEditor)));

@@ -10,4 +10,4 @@ store = createStore(
   applyMiddleware(thunk)
 );
 
-module.exports = {store, actions};
+export {store, actions};

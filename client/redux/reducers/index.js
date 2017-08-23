@@ -57,7 +57,7 @@ config = (state = {}, action)=>{
   }
 };
 
-module.exports = combineReducers({
+export default combineReducers({
   keys,
   currentKey,
   currentKeyIsMaster,

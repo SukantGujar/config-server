@@ -33,7 +33,7 @@ module.exports = {
 
 				options: {
 					presets: [
-						'es2015', 
+						['es2015', {"modules" : false}], 
 						'react', 
 						"es2017"
 					],

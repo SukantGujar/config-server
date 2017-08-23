@@ -76,4 +76,4 @@ mapDispatchToProps = dispatch => ({
   }
 });
 
-module.exports = withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(ConfigEditor));
+export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(ConfigEditor));
