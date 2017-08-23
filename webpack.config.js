@@ -3,16 +3,16 @@ const path = require('path');
 
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin'),
 HtmlWebpackPlugin = require('html-webpack-plugin'),
-CopyWebpackPlugin = require('copy-webpack-plugin');
+CopyWebpackPlugin = require('copy-webpack-plugin'),
+LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 
 module.exports = {
 	devtool: "sourcemap",
 
-	entry: './client/index.js',
+	entry: ['babel-polyfill', './client/index.js'],
 
 	devServer : {
 		publicPath : "/ui/",
-		//contentBase : __dirname +  "/ui/",
 		historyApiFallback: {
 			index: '/ui/'
 		}
@@ -32,10 +32,13 @@ module.exports = {
 				loader: 'babel-loader',
 
 				options: {
-					presets: ['es2015', 'react'],
+					presets: [
+						'es2015', 
+						'react', 
+						"es2017"
+					],
 					plugins: [
-						["transform-async-to-generator"],
-						["syntax-async-functions"],
+						["lodash"],
 						["transform-class-properties", { "spec": true }],
 						["transform-object-rest-spread", { "useBuiltIns": true }]
 					]
@@ -45,6 +48,10 @@ module.exports = {
 	},
 
 	plugins: [
+		new LodashModuleReplacementPlugin({
+			'collections': true,
+			'paths': true
+		}),
 		new CopyWebpackPlugin([
 			{
 				from : "node_modules/monaco-editor/min/vs",
