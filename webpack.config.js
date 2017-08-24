@@ -11,13 +11,14 @@ module.exports = {
 
 	entry: ['babel-polyfill', './client/index.js'],
 
+	/*
 	"resolve": {
     "alias": {
       "react": "preact-compat",
       "react-dom": "preact-compat"
     }
 	},
-	
+*/	
 	devServer : {
 		publicPath : "/ui/",
 		historyApiFallback: {
