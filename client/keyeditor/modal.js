@@ -68,6 +68,12 @@ class KeyEditorDialog extends Component{
     {_id} = this.props;
     ok && ok(_id, JSON.parse(read), JSON.parse(write));
   };
+  componentWillReceiveProps({read, write}){
+    this.setState({
+      read : JSON.stringify(read), 
+      write : JSON.stringify(write)
+    });
+  }
   constructor(props){
     const {read, write} = props;
     super(props);

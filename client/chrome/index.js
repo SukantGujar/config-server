@@ -24,8 +24,6 @@ import {withRouter} from 'react-router';
 
 import features from '../features';
 
-import searchParser from '../utility/searchparser';
-
 import {actions} from '../redux';
 
 function TabContainer(props) {
@@ -99,8 +97,6 @@ class Chrome extends Component {
     let {location, classes, isMaster, onApplyKeyClick, match, history} = this.props,
     applicableFeatures = features.filter(({precondition})=>precondition(this.props));
   
-    const {e} = searchParser(history.location.search);
-
     return (
       <div className={classes.root}>
         <AppBar position="static">

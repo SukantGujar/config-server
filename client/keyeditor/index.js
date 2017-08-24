@@ -19,6 +19,8 @@ import KeyEditorDialog from './modal';
 
 import {actions} from '../redux';
 
+import searchParser from '../utility/searchparser';
+
 const styles = theme => ({
   root: {
     width: 600,
@@ -34,7 +36,6 @@ class KeyEditor extends Component{
     let 
     {
       keys = [], master="", 
-      editedKey,
       classes, 
       match,
       onAddKeyClick,
@@ -44,6 +45,7 @@ class KeyEditor extends Component{
       onKeyEditorCancelClick,
       history
     } = this.props,
+    {e: editedKey} = searchParser(history.location.search),
     editedToken = (editedKey && keys.find(item => item._id == editedKey)) || {read: ["-**"], write : ["-**"]};
 
     return (
@@ -150,7 +152,6 @@ mapDispatchToProps = (dispatch)=>({
 KeyEditor.propTypes = {
   "keys" : PropTypes.array.isRequired,
   "master" : PropTypes.string,
-  "editedKey" : PropTypes.string,
   "onAddKeyClick" : PropTypes.func.isRequired,
   "onDeleteKeyClick" : PropTypes.func.isRequired,
   "onCopyKeyClick" : PropTypes.func.isRequired,
