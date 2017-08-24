@@ -24,7 +24,7 @@ loadTokens = ()=>{
   .find()
   .toArray()
   .then(docs => {
-    return docs.reduce((token, tokens)=>{
+    return docs.reduce((tokens, token)=>{
     tokens[token._id] = token;
     return tokens;
   }, {})});
@@ -62,6 +62,57 @@ createNewToken = (read = DEFAULT_READ_FILTER, write = DEFAULT_WRITE_FILTER)=>{
   token = makeTokenInstance(tokenId, read, write);
   return saveToken(token);
 },
+validatePermission = (permission)=>_.isArray(permission) && permission.every(_.isString),
+parseToken = (rawToken, key)=>{
+  let {_id, read, write} = rawToken;
+  if (_.isString(_id) && _id === key && validatePermission(read) && validatePermission(write)){
+    return {_id, read, write};
+  };
+
+  let logToken = rawToken;
+
+  try {
+    logToken = JSON.stringify(rawToken);
+  }
+  catch(e){}
+
+  console.error(`Error parsing raw token: ${logToken}`);
+
+  return false;
+},
+importTokens = (rawTokens)=>{
+  let tokensCount = _.size(rawTokens);
+  if (tokensCount < 1){
+    console.log("No tokens to import.");
+    return false;
+  }
+  
+  const parsedTokens = _.reduce(rawTokens, (results, token, key)=>{
+    token = parseToken(token, key);
+    if (token){
+      results[key] = token;
+    }
+
+    return results;
+  }, {});
+
+  db.collection(TOKENS_KEY)
+  .remove({})
+  .then(()=>{
+    let bulk = db.collection(TOKENS_KEY).initializeOrderedBulkOp();
+    _.forEach(parsedTokens, token => {
+      console.info(`Imported token ${JSON.stringify(token)}.`);
+      bulk.insert(token);
+    })
+    return bulk.execute();
+  })
+  .then(()=>console.log(`${_.size(parsedTokens)} tokens imported.`))
+  .catch(console.error);
+
+  tokens = Object.assign({}, parsedTokens);
+
+  return tokens;
+},
 init = (dbInstance)=> {
   if (!_.isEmpty(tokens)){
     return Promise.resolve(api);
@@ -80,6 +131,7 @@ const api = {
   deleteToken,
   getMasterToken,
   getTokens,
+  importTokens,  
   makeTokenInstance,
   saveToken
 };

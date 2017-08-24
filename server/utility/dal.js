@@ -11,7 +11,12 @@ db = {
       }),
       "findOne": ()=>(Promise.resolve({})),
       "save" : ()=>(Promise.resolve({})),
-      "deleteOne" : ()=>(Promise.resolve({}))
+      "deleteOne" : ()=>(Promise.resolve({})),
+      "remove" : ()=>(Promise.resolve({})),
+      "initializeOrderedBulkOp" : ()=> ({
+        "insert": ()=>{},
+        "execute" : ()=>(Promise.resolve({}))
+      })
   })
 },
 

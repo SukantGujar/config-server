@@ -11,7 +11,7 @@ port = args[BIND_PORT_KEY] || process.env[BIND_PORT_KEY] || DEFAULT_BIND_PORT,
 {init:dbInit} = require("./utility/dal"),
 {init:tokenInit} = require("./routes/tokens/tokenprovider"),
 {init:configInit} = require("./routes/config/configprovider"),
-{tokens, config} = require("./routes"),
+{tokens, config, data} = require("./routes"),
 {admin, authorized} = require("./validatetoken");
 
 dbInit().then((db)=>Promise.all([tokenInit(db), configInit(db)])).then(
@@ -23,6 +23,7 @@ dbInit().then((db)=>Promise.all([tokenInit(db), configInit(db)])).then(
     app.use(bodyParser.json());
     
     app.use("/api/tokens", admin, tokens);
+    app.use("/api/data", admin, data);
     
     app.use("/api/config", authorized, config);
     
