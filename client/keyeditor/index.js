@@ -28,6 +28,9 @@ const styles = theme => ({
   },
   star:{
     fill: theme.palette.primary[500]
+  },
+  keyLabel : {
+    color:  "black"
   }
 });
 
@@ -70,7 +73,7 @@ class KeyEditor extends Component{
                             <CopyIcon />
                           </IconButton>
                         </ListItemIcon>
-                      <ListItemText primary={<p><Link to={`${match.url}?e=${_id}`}>{_id}</Link></p>} secondary={<span>read: {JSON.stringify(read)},<br/> write: {JSON.stringify(write)}</span>} />
+                      <ListItemText primary={<p><Link className={classes.keyLabel} to={`${match.url}?e=${_id}`}>{_id}</Link></p>} secondary={<span>read: {JSON.stringify(read)},<br/> write: {JSON.stringify(write)}</span>} />
                       <ListItemSecondaryAction>
                         <IconButton aria-label="Delete" onClick={()=>onDeleteKeyClick(_id)}>
                           <DeleteIcon />
