@@ -111,7 +111,7 @@ class Chrome extends Component {
     let {location, classes, isMaster, onApplyKeyClick, match, history} = this.props,
     tabs = defaultTabs;
   
-    const {e} = searchParser(location.search);
+    const {e} = searchParser(history.location.search);
     if (!isMaster){
       const [first, second] = tabs;
       tabs = [first];
@@ -197,7 +197,7 @@ class Chrome extends Component {
             />
             <Route path={`${match.url}/keys`} render={
               ({match})=><TabContainer>
-                <KeyEditor editedKey={match.params.key} />
+                <KeyEditor editedKey={e} />
               </TabContainer>} 
             />
           </Grid>

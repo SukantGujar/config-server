@@ -68,7 +68,7 @@ class KeyEditor extends Component{
                             <CopyIcon />
                           </IconButton>
                         </ListItemIcon>
-                      <ListItemText primary={<p><Link to={`/keys?e=${_id}`}>{_id}</Link></p>} secondary={<span>read: {JSON.stringify(read)},<br/> write: {JSON.stringify(write)}</span>} />
+                      <ListItemText primary={<p><Link to={`${match.url}?e=${_id}`}>{_id}</Link></p>} secondary={<span>read: {JSON.stringify(read)},<br/> write: {JSON.stringify(write)}</span>} />
                       <ListItemSecondaryAction>
                         <IconButton aria-label="Delete" onClick={()=>onDeleteKeyClick(_id)}>
                           <DeleteIcon />
@@ -156,7 +156,8 @@ KeyEditor.propTypes = {
   "onCopyKeyClick" : PropTypes.func.isRequired,
   "onKeyEditorOkClick" : PropTypes.func.isRequired,
   "onKeyEditorCancelClick" : PropTypes.func.isRequired,  
-  "history" : PropTypes.object.isRequired
+  "history" : PropTypes.object.isRequired,
+  "match" : PropTypes.object.isRequired
 }
 
 export default withRouter(withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(KeyEditor)));
