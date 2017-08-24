@@ -22,23 +22,11 @@ import {
 
 import {withRouter} from 'react-router';
 
-import ConfigEditor from '../configeditor';
-import KeyEditor from '../keyeditor';
+import features from '../features';
 
 import searchParser from '../utility/searchparser';
 
 import {actions} from '../redux';
-
-const defaultTabs = [
-  {
-    "label" : "config",
-    "path" : ""
-  },
-  {
-    "label" : "keys",
-    "path" : "/keys"
-  }
-];
 
 function TabContainer(props) {
   return (
@@ -95,11 +83,11 @@ const styles = theme => ({
   }
 });
 
-const renderTabs = _.curry((tabs, classes, {location, match}) => {
+const renderTabs = _.curry((features, classes, {location, match}) => {
   return(
   <Tabs value={`${location.pathname}`} onChange={(event, value)=>value}>
   {
-    tabs.map(
+    features.map(
       ({label, path})=><Tab key={label} label={label} value={`${match.url}${path}`} className={classes.tabLink} component={Link} to={`${match.url}${path}`} />
     )
   }
@@ -109,18 +97,15 @@ const renderTabs = _.curry((tabs, classes, {location, match}) => {
 class Chrome extends Component {
   render(){
     let {location, classes, isMaster, onApplyKeyClick, match, history} = this.props,
-    tabs = defaultTabs;
+    applicableFeatures = features.filter(({precondition})=>precondition(this.props));
   
     const {e} = searchParser(history.location.search);
-    if (!isMaster){
-      const [first, second] = tabs;
-      tabs = [first];
-    }
+
     return (
       <div className={classes.root}>
         <AppBar position="static">
           <Toolbar className={classes.toolbar}>
-            <Route path={`${match.url}:key`} render={renderTabs(tabs, classes)} />
+            <Route path={`${match.url}:key`} render={renderTabs(applicableFeatures, classes)} />
             <Grid item>
               <Grid container align="center" justify="space-between" className={classes.apiKey}>
                 <Grid item style={{cursor:"default"}}>
@@ -190,16 +175,26 @@ class Chrome extends Component {
         <Route path={`${match.url}:key`} render = {({match})=>(
           <Grid container align="center" justify="center" >
           <Grid item>
-            <Route exact path={`${match.url}`} render={
-              ()=><TabContainer>
-                <ConfigEditor />
-              </TabContainer>} 
-            />
-            <Route path={`${match.url}/keys`} render={
-              ({match})=><TabContainer>
-                <KeyEditor editedKey={e} />
-              </TabContainer>} 
-            />
+            {
+              applicableFeatures.map(
+                ({FeatureComponent, path})=>(
+                  <Route 
+                    key={path} 
+                    exact 
+                    path={`${match.url}${path}`} 
+                    render={
+                      ()=>{
+                        return ( 
+                          <TabContainer>
+                            <FeatureComponent />
+                          </TabContainer>
+                        );
+                      }
+                    } 
+                  />
+                )
+              )
+            }
           </Grid>
         </Grid>
         )} />

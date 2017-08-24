@@ -76,4 +76,10 @@ mapDispatchToProps = dispatch => ({
   }
 });
 
+export const path = "";
+
+export const label = "Config";
+
+export const precondition = false;
+
 export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(ConfigEditor));

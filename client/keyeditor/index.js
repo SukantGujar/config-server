@@ -160,4 +160,10 @@ KeyEditor.propTypes = {
   "match" : PropTypes.object.isRequired
 }
 
+export const path = "/keys";
+
+export const label = "Keys";
+
+export const precondition = ({isMaster = false})=>isMaster;
+
 export default withRouter(withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(KeyEditor)));
