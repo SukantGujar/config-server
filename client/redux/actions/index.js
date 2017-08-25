@@ -1,4 +1,6 @@
-import {tokensApi, configApi} from '../clientapi';
+import {tokensApi, configApi, dataApi} from '../clientapi';
+
+import download from 'downloadjs';
 
 const actions = {
   saveConfig: function(config){
@@ -64,6 +66,42 @@ const actions = {
       type : "SET_KEY_IS_MASTER",
       isMaster
     })
+  },
+
+  snapshotAsync:function(){
+    let self = this;
+    return async function(dispatch, getState) {
+      let {currentKey} = getState(), snapshot = null;
+      try {
+        snapshot = await dataApi.snapshot(currentKey);
+        snapshot = JSON.stringify(snapshot, null, 2);
+      }
+      catch(e){
+        console.error(e);
+        return;
+      }
+
+      const 
+      date = new Date().toISOString().replace(/T/, '_').replace(/\..+/, '').replace(/[-:]/g, ''),
+      fileName =  `${date}.json`;
+      download(snapshot, fileName, 'application/json');
+    }
+  },
+
+  restoreAsync: function(snapshot){
+    let self = this;
+    return async function(dispatch, getState) {
+      let result = null, {currentKey} = getState();
+      try {
+        result = await dataApi.restore(currentKey, snapshot);
+      }
+      catch (e){
+        console.error(e);
+        return null;
+      }
+
+      dispatch(self.setupSessionAsync(currentKey));
+    }
   },
 
   createKeyAsync: function() {

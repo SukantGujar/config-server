@@ -1,18 +1,22 @@
 import axios from 'axios';
 import _ from 'lodash';
 
-const _tokensApi = axios.create({
-  baseURL : "/api/tokens/",
-  timeout : 1000
+const
+apiRoot = '/api',
+defaultTimeout = 3000,
+createApi = path => axios.create({
+  baseURL : `${apiRoot}/${path}/`,
+  timeout : defaultTimeout
 }),
-_configApi = axios.create({
-  baseURL : "/api/config/",
-  timeout : 1000
-}),
+withDefaults = api => {
+  api.defaults.headers.post['Content-Type'] = 'application/json';
+  return api;
+},
+_tokensApi = withDefaults(createApi("tokens")),
+_configApi = withDefaults(createApi("config")),
+_dataApi = withDefaults(createApi("data")),
 useAuth = (key, config = {})=>Object.assign({}, config, {headers : {'x-auth-token' : key}}),
 extractData = result => result.data;
-_tokensApi.defaults.headers.post['Content-Type'] = 'application/json';
-_configApi.defaults.headers.post['Content-Type'] = 'application/json';
 
 export const tokensApi = {
   getAllTokens : (key)=>_tokensApi.get('/', useAuth(key)).then(extractData).then(tokens=>_.map(tokens, _.identity)),
@@ -24,4 +28,9 @@ export const tokensApi = {
 export const configApi = {
   loadConfig : (key) => _configApi.get('/', useAuth(key)).then(extractData),
   saveConfig : (key, config) => _configApi.put('/', config, useAuth(key)).then(extractData)
+};
+
+export const dataApi = {
+  snapshot : (key) => _dataApi.get('/snapshot', useAuth(key)).then(extractData),
+  restore : (key, snapshot) => _dataApi.post('/restore', snapshot, useAuth(key)).then(extractData)
 };
