@@ -55,13 +55,13 @@ const styles = theme => ({
     justifyContent:"center"
   },
   apiKey: {
-    marginLeft:20,
+    //marginLeft:20,
     paddingLeft:20,
     borderRadius:3,
     backgroundColor: "rgba(1, 1, 1, 0.1)"
   },
   input: {
-    width: 300,
+    //width: 300,
     color: "white",
     display: "flex",
     alignItems: "center"
@@ -78,12 +78,15 @@ const styles = theme => ({
     fill : "#eee",
     height : 600,
     width : 600
+  },
+  tabs : {
+    marginRight : 20
   }
 });
 
 const renderTabs = _.curry((features, classes, {location, match}) => {
   return(
-  <Tabs value={`${location.pathname}`} onChange={(event, value)=>value}>
+  <Tabs value={`${location.pathname}`} onChange={(event, value)=>value} className={classes.tabs}>
   {
     features.map(
       ({label, path})=><Tab key={label} label={label} value={`${match.url}${path}`} className={classes.tabLink} component={Link} to={`${match.url}${path}`} />
