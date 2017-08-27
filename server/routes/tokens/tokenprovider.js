@@ -12,7 +12,7 @@ db = null,
   DEFAULT_READ_FILTER,
   DEFAULT_WRITE_FILTER
 } = require("../../utility/constants"),
-MASTER_TOKEN = args[MASTER_TOKEN_KEY] || process.env[MASTER_TOKEN_KEY] || "abcd",
+MASTER_TOKEN = args[MASTER_TOKEN_KEY] || process.env[MASTER_TOKEN_KEY],
 getTokens = ()=>{
   return tokens;
 }
@@ -135,6 +135,14 @@ const api = {
   makeTokenInstance,
   saveToken
 };
+
+if (!MASTER_TOKEN){
+  console.error(`MASTER_TOKEN is not configured. You can specify it as a command argument or env param named MASTER_TOKEN.`);
+  console.error(`E.g. node server/index.js --MASTER_TOKEN=examplemastertoken`);
+  console.error(`Or   npm start -- --MASTER_TOKEN=examplemastertoken`);
+  
+  process.exit(1);
+}
 
 console.info(`MASTER Token is: ${MASTER_TOKEN}`);
 
