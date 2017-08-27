@@ -8,6 +8,7 @@
     "build": "webpack",
     "build-prod": "webpack -p --profile --json > stats.json",
     "build-watch": "webpack --watch",
+    "build-docker" : "npm run build-prod && docker build .",
     "start-ui": "webpack-dev-server --watch --inline --port 3000",
     "start": "node server/index.js"
   },
