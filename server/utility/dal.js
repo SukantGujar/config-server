@@ -1,9 +1,10 @@
 let 
 client = require("mongodb").MongoClient,
+redact = require("redact-url"),
 DB_URL = process.env["DB_URL"],
-//TODO: Remove mongoclient mock
-//db = null,
+db = null,
 
+/*
 db = {
   collection : () => ({
       "find" : () => ({
@@ -19,7 +20,7 @@ db = {
       })
   })
 },
-
+*/
 init = ()=>{
   if (db){
     return Promise.resolve(db);
@@ -27,6 +28,8 @@ init = ()=>{
   if (!DB_URL){
     return Promise.reject("DB_URL is absent.");
   }
+
+  console.info(`DB_URL is ${redact(DB_URL)}`);
 
   return client.connect(DB_URL)
   .then(db => {
