@@ -67,8 +67,8 @@ ConfigEditor.propTypes = {
   "onSaveClick" : PropTypes.func.isRequired
 };
 
-const mapStateToProps = state => ({
-  "config" : state.config
+const mapStateToProps = ({config}) => ({
+  config
 }),
 mapDispatchToProps = dispatch => ({
   "onSaveClick" : function(config){

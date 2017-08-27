@@ -4,7 +4,13 @@ const path = require('path');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin'),
 HtmlWebpackPlugin = require('html-webpack-plugin'),
 CopyWebpackPlugin = require('copy-webpack-plugin'),
-LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
+LodashModuleReplacementPlugin = require('lodash-webpack-plugin'),
+CSSLoader = [
+  'css-loader?sourceMap&-minimize',
+  'modules',
+  'importLoaders=1',
+  'localIdentName=[name]__[local]__[hash:base64:5]'
+].join('&');
 
 module.exports = {
 	devtool: "sourcemap",
@@ -51,6 +57,18 @@ module.exports = {
 						["transform-object-rest-spread", { "useBuiltIns": true }]
 					]
 				}
+			},
+			{
+				test: /\.css$/,
+				loaders: ['style-loader', CSSLoader]
+			}, 
+			{
+				test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+				loader: "url-loader?limit=10000&minetype=application/font-woff"
+			}, 
+			{
+				test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+				loader: "file-loader"
 			}
 		]
 	},

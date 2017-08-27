@@ -2,6 +2,8 @@ import {tokensApi, configApi, dataApi} from '../clientapi';
 
 import download from 'downloadjs';
 
+import {addNotification as notify} from 'reapop';
+
 const actions = {
   saveConfig: function(config){
     return ({
@@ -96,11 +98,14 @@ const actions = {
         result = await dataApi.restore(currentKey, snapshot);
       }
       catch (e){
+        dispatch(notify({message: `Sanpshot cannot be restored due to an error, check console.`, status: "error"}));      
+        
         console.error(e);
         return null;
       }
 
       dispatch(self.setupSessionAsync(currentKey));
+      dispatch(notify({message: `Snapshot restored.`, status: "success"}));      
     }
   },
 
@@ -112,11 +117,14 @@ const actions = {
         newKey = await tokensApi.createNewToken(currentKey);
       }
       catch (e){
+        dispatch(notify({message: `Key cannot be created due to an error, check console.`, status: "error"}));      
+        
         console.error(e);
         return null;
       }
 
       dispatch(self.addKey(newKey));
+      dispatch(notify({message: `Key ${newKey._id} created.`, status: "success"}));      
 
       return newKey._id;
     }
@@ -130,11 +138,14 @@ const actions = {
         updatedKey = await tokensApi.updateToken(currentKey, key, read, write);
       }
       catch (e){
+        dispatch(notify({message: `Key ${key} cannot be updated due to an error, check console.`, status: "error"}));
+      
         console.error(e)
         return;
       }
 
       dispatch(self.updateKey(key, updatedKey.read, updatedKey.write));
+      dispatch(notify({message: `Key ${key} updated.`, status: "success"}));      
     }
   },
 
@@ -147,11 +158,14 @@ const actions = {
         deletedKey = await tokensApi.deleteToken(currentKey, key);
       }
       catch (e){
+        dispatch(notify({message: `Key ${key} cannot be deleted due to an error, check console.`, status: "error"}));
+      
         console.error(e);
         return;
       }
 
       dispatch(self.deleteKey(key));
+      dispatch(notify({message: `Key ${key} deleted.`, status: "success"}));
     }
   },
 
@@ -164,11 +178,13 @@ const actions = {
         result = await configApi.saveConfig(currentKey, config);
       }
       catch (e){
+        dispatch(notify({message: "Configuration cannot be updated due to an error, check console.", status: "error"}));
         console.error(e);
         return;
       }
 
       dispatch(self.setConfig(result));
+      dispatch(notify({message: "Configuration updated.", status: "success"}));
     }
   },
 
@@ -181,8 +197,10 @@ const actions = {
         config = await configApi.loadConfig(key);
       }
       catch (e){
+        dispatch(notify({message: `Cannot login with key ${key}.`, status: "error"}));
+        
         console.error(e);
-        return;
+        return false;
       }
 
       dispatch(self.setKey(key));
@@ -200,6 +218,8 @@ const actions = {
       }
 
       dispatch(self.setKeys(keys));
+
+      return true;
     }
   }
 };

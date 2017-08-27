@@ -1,5 +1,6 @@
 import {combineReducers} from 'redux';
 import copy from 'copy-to-clipboard';
+import {reducer as notifications} from 'reapop';
 
 const keys = (state = [], action) => {
   switch(action.type) {
@@ -61,5 +62,6 @@ export default combineReducers({
   keys,
   currentKey,
   currentKeyIsMaster,
-  config
+  config,
+  "notifications" : notifications({position:"bc", status:"success", dismissible:true, dismissAfter:2500, closeButton:false, allowHTML:false})
 });

@@ -22,6 +22,8 @@ import {
 
 import {withRouter} from 'react-router';
 
+import Notifications from '../notifications';
+
 import features from '../features';
 
 import {actions} from '../redux';
@@ -132,6 +134,9 @@ class Chrome extends Component {
                         }}
                         id="apiKey"
                         classes={{input : classes.input}} 
+                        style={{
+                          width:300
+                        }}
                         disableUnderline={true}
                         placeholder="Type your API Key here and click Apply." 
                       />
@@ -204,6 +209,7 @@ class Chrome extends Component {
           </Grid>
         </Grid>
         )} />
+        <Notifications />
       </div>
     );
   }
@@ -219,9 +225,11 @@ const mapStateToProps = state => ({
   "isMaster" : state.currentKeyIsMaster
 }),
 mapDispatchToProps = dispatch => ({
-  onApplyKeyClick: (key, history)=>{
-    dispatch(actions.setupSessionAsync(_.trim(key)))
-    history.push(`/${key}`);
+  onApplyKeyClick: async (key, history)=>{
+    let result = await dispatch(actions.setupSessionAsync(_.trim(key)));
+    if (result){
+      history.push(`/${key}`);
+    }
   }
 });
 
