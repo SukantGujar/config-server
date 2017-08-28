@@ -106,7 +106,7 @@ class Chrome extends Component {
       <div className={classes.root}>
         <AppBar position="static">
           <Toolbar className={classes.toolbar}>
-            <Route path={`${match.url}:key`} render={renderTabs(applicableFeatures, classes)} />
+            <Route path={`${match.path}:key`} render={renderTabs(applicableFeatures, classes)} />
             <Grid item>
               <Grid container align="center" justify="space-between" className={classes.apiKey}>
                 <Grid item style={{cursor:"default"}}>
@@ -114,7 +114,7 @@ class Chrome extends Component {
                 </Grid>
                 <Grid item>
                   <Switch>
-                    <Route exact path={`${match.url}`} render={()=>(
+                    <Route exact path={`${match.path}`} render={()=>(
                       <Input 
                         inputRef={(input)=>{
                           if (!input){
@@ -141,14 +141,14 @@ class Chrome extends Component {
                         placeholder="Type your API Key here and click Apply." 
                       />
                     )} />
-                    <Route path={`${match.url}:key`} render={({match})=>(
+                    <Route path={`${match.path}:key`} render={({match})=>(
                       <InputLabel classes={{root : classes.input}}>{isMaster && <StarIcon titleAccess="Master Key" className={classes.star} />}{match.params.key}</InputLabel>
                     )} />
                   </Switch>
                 </Grid>
                 <Grid item>
                 <Switch>
-                    <Route exact path={`${match.url}`} render={({history})=>(
+                    <Route exact path={`${match.path}`} render={({history})=>(
                       <Button 
                       color="contrast" 
                       onClick={
@@ -159,7 +159,7 @@ class Chrome extends Component {
                       Apply
                     </Button>
                     )} />
-                    <Route path={`${match.url}:key`} render={({match, history})=>(
+                    <Route path={`${match.path}:key`} render={({match, history})=>(
                       <Button 
                         color="contrast" 
                         onClick={
@@ -176,7 +176,7 @@ class Chrome extends Component {
             </Grid>
           </Toolbar>
         </AppBar>
-        <Route path={`${match.url}:key`} render = {({match})=>(
+        <Route path={`${match.path}:key`} render = {({match})=>(
           <Grid container align="center" justify="center" >
           <Grid item>
             {
@@ -185,7 +185,7 @@ class Chrome extends Component {
                   <Route 
                     key={path} 
                     exact 
-                    path={`${match.url}${path}`} 
+                    path={`${match.path}${path}`} 
                     render={
                       ()=>{
                         return ( 
@@ -202,7 +202,7 @@ class Chrome extends Component {
           </Grid>
         </Grid>
         )} />
-        <Route exact path={`${match.url}`} render = {({match})=>(
+        <Route exact path={`${match.path}`} render = {({match})=>(
           <Grid container align="center" justify="center" >
           <Grid item>
             <SettingsIcon className={classes.settingsIcon} />
