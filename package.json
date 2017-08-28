@@ -8,7 +8,7 @@
     "build": "webpack",
     "build-prod": "webpack -p --profile --json > stats.json",
     "build-watch": "webpack --watch",
-    "build-docker" : "npm run build-prod && docker build .",
+    "build-docker": "npm run build-prod && docker build .",
     "start-ui": "webpack-dev-server --watch --inline --port 3000",
     "start": "node server/index.js"
   },
@@ -23,6 +23,7 @@
     "bluebird": "^3.5.0",
     "body-parser": "^1.17.2",
     "compression": "^1.7.0",
+    "cors": "^2.8.4",
     "express": "^4.15.4",
     "express-graceful-exit": "^0.4.0",
     "json-property-filter": "^1.2.0",

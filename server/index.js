@@ -4,6 +4,7 @@ args = require("minimist")(process.argv.slice(2)),
 gracefulExit = require('express-graceful-exit'),
 path = require("path"),
 compression = require("compression"),
+cors = require("cors"),
 app = express(),
 {BIND_ADDRESS_KEY, BIND_PORT_KEY, DEFAULT_BIND_ADDRESS, DEFAULT_BIND_PORT} = require("./utility/constants"),
 host = args[BIND_ADDRESS_KEY] || process.env[BIND_ADDRESS_KEY] || DEFAULT_BIND_ADDRESS,
@@ -25,7 +26,7 @@ dbInit().then((db)=>Promise.all([tokenInit(db), configInit(db)])).then(
     app.use("/api/tokens", admin, tokens);
     app.use("/api/data", admin, data);
     
-    app.use("/api/config", authorized, config);
+    app.use("/api/config", cors(), authorized, config);
     
     app.use("/ui/", express.static(path.resolve(__dirname + "/../ui/")));
     app.use("/ui/*", express.static(path.resolve(__dirname + "/../ui/index.html")));
