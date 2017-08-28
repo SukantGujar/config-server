@@ -10,7 +10,8 @@ CSSLoader = [
   'modules',
   'importLoaders=1',
   'localIdentName=[name]__[local]__[hash:base64:5]'
-].join('&');
+].join('&'),
+baseUrl = "/ui/";
 
 module.exports = {
 	devtool: "sourcemap",
@@ -26,9 +27,9 @@ module.exports = {
 	},
 */	
 	devServer : {
-		publicPath : "/ui/",
+		publicPath : baseUrl,
 		historyApiFallback: {
-			index: '/ui/'
+			index: baseUrl
 		}
 	},
 
@@ -85,6 +86,7 @@ module.exports = {
 			}
 		]),
 		new HtmlWebpackPlugin({
+			"baseUrl": baseUrl,
 			"template" : "./client/assets/index.html"
 		})
 		//new UglifyJSPlugin()
