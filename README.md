@@ -14,7 +14,16 @@ A simple json configuration manager, intended to be used as a shared configurati
 
 ## Run Server
 ### Quick start
-`npm start -- --MASTER_TOKEN=replacemewithyourtoken --DB_URL=mongodb://user:pass@yourserver`
+#### Linux
+```
+export DB_URL=mongodb://user:pass@yourserver && \
+npm start -- --MASTER_TOKEN=replacemewithyourtoken
+```
+#### Windows
+```
+set DB_URL=mongodb://user:pass@yourserver
+npm start -- --MASTER_TOKEN=replacemewithyourtoken
+```
 #### Options
 ##### Required
 1. MASTER_TOKEN: This key is used by config server to allow admin access. You can login with this key in the dashboard and then create other access keys, seed the global configuration data, take snapshots and restore them etc. Keep this key safe. At the moment, the stored data is *not* encrypted with this key, so you can switch it anytime with a new one if you lose it. 
@@ -28,8 +37,9 @@ A simple json configuration manager, intended to be used as a shared configurati
 #### Build image
 `docker build .`
 #### Run server
-`docker run -p 3000:3000 -e MASTER_TOKEN=replacemewithyourtoken --DB_URL=mongodb://user:pass@yourserver <dockerimagename>`
-
+```
+docker run -p 3000:3000 -e MASTER_TOKEN=replacemewithyourtoken  -e DB_URL=mongodb://user:pass@yourserver <dockerimagename>
+```
 ## Access Dashboard
 
 ### Local server
