@@ -11,7 +11,7 @@ ENV MASTER_TOKEN replaceme
 #ENV DB_URL mongodb://server/
 
 ENV BIND_PORT 3000
-EXPOSE $BIND_PORT
+EXPOSE 3000
 
 ENV WD /app/
 
@@ -19,8 +19,7 @@ WORKDIR $WD
 
 COPY ./package.json ./yarn.lock $WD
 
-RUN yarn install --production ; \
-    yarn cache clean
+RUN yarn install --production && yarn cache clean
 
 COPY ./ui $WD/ui/
 COPY ./server $WD/server/
