@@ -82,7 +82,7 @@ Click on `Add a new key` to add a fresh key. By default a new key doesn't have r
 config-server uses [json-property-filter](https://www.npmjs.com/package/json-property-filter) syntax to restrict read and write operations. You can read detailed documentation [here](https://github.com/cyrilschumacher/json-property-filter/blob/master/README.md). A good list of examples can be found [here](https://runkit.com/cyrilschumacher/json-property-filter).
 
 ##### Read/Write filters are not cascaded
-In config-server, read and write are separate privileges (i.e. the filter pattern used for, say read, is not automatically included in write privileges).
+In config-server, read and write are separate privileges (i.e. the filter pattern used for read is not automatically included in write privileges).
 
 ##### Example
 Let's say our example application has three tiers - ui, api and db and it is oauth driven. Our example config json looks like this -
@@ -133,7 +133,7 @@ write: ["-**"]
 read: ["mongo", "auth", "api"]
 write: ["-**"]
 ``` 
-Your keys should like like this now -
+Your keys should look like this now -
 
 ![Example keys](./docs/5.png)
 
@@ -143,7 +143,7 @@ Click on the copy icon to copy the UI key into clipboard -
 You can now click on the `Change` button in the app bar to try out the UI key -
 ![UI Key test-drive](./docs/7.png)
 
-The Config tab will now display data filtered as-per the configured read privileges -
+The Config tab will now display data filtered through the configured read privileges -
 
 ![UI Config](./docs/8.png)
 
@@ -151,7 +151,7 @@ Now change the key to the API key and verify the config data -
 
 ![API Config](./docs/9.png)
 
-> As we have not configured `write` privileges to any key so far, any changes made to the config data in the Config tab with either of these keys won't persist.
+> As we have not configured `write` privileges on any key so far, any changes made to the config data in the Config tab with either of these keys **won't persist**.
 
 Let's give write access to the API key on `api` node. Switch to master token and configure the below privileges for API key -
 
