@@ -10,7 +10,8 @@ A simple json configuration manager, intended to be used as a shared configurati
 `npm install`
 
 ## Build client ui
-`npm run buld-prod`
+`npm run build-prod`
+> On Windows, you need to install Webpack 3.0+ globally before running this command.
 
 ## Run Server
 ### Quick start
