@@ -1,8 +1,8 @@
 module.exports = {
-  "namespace" : "config-server",
+  "namespace" : "configserver",
   "MASTER_TOKEN_KEY" : "MASTER_TOKEN",
-  "TOKENS_KEY" : "config-server-tokens",
-  "CONFIG_KEY" : "config-server-config",
+  "TOKENS_KEY" : "configservertokens",
+  "CONFIG_KEY" : "configserverconfig",
   "BIND_ADDRESS_KEY" : "BIND_ADDRESS",
   "BIND_PORT_KEY" : "BIND_PORT",
   "DEFAULT_BIND_ADDRESS" : "0.0.0.0",
