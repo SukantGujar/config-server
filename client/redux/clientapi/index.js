@@ -21,7 +21,7 @@ extractData = result => result.data;
 export const tokensApi = {
   getAllTokens : (key)=>_tokensApi.get('/', useAuth(key)).then(extractData).then(tokens=>_.map(tokens, _.identity)),
   createNewToken : (key)=>_tokensApi.post('/', {}, useAuth(key)).then(extractData),
-  updateToken : (key, token, read, write)=>_tokensApi.put(`/${token}`, {read, write}, useAuth(key)).then(extractData),
+  updateToken : (key, token, read, write, name)=>_tokensApi.put(`/${token}`, {read, write, name}, useAuth(key)).then(extractData),
   deleteToken : (key, token)=>_tokensApi.delete(`/${token}`, useAuth(key)).then(extractData)
 };
 

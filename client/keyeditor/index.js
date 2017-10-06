@@ -49,7 +49,7 @@ class KeyEditor extends Component{
       history
     } = this.props,
     {e: editedKey} = searchParser(history.location.search),
-    editedToken = (editedKey && keys.find(item => item._id == editedKey)) || {read: ["-**"], write : ["-**"]};
+    editedToken = (editedKey && keys.find(item => item._id == editedKey)) || {read: ["-**"], write : ["-**"], name : ""};
 
     return (
       <div className={classes.root}>
@@ -66,14 +66,14 @@ class KeyEditor extends Component{
           (_.size(keys) && (
             <List>
               {
-                keys.map(({_id, read, write})=>(
+                keys.map(({_id, read, write, name})=>(
                     <ListItem key={_id}>
                         <ListItemIcon aria-label="Copy" onClick={()=>onCopyKeyClick(_id)}>
                           <IconButton>
                             <CopyIcon />
                           </IconButton>
                         </ListItemIcon>
-                      <ListItemText primary={<p><Link className={classes.keyLabel} to={`${match.url}?e=${_id}`}>{_id}</Link></p>} secondary={<span>read: {JSON.stringify(read)},<br/> write: {JSON.stringify(write)}</span>} />
+                      <ListItemText primary={<p><Link className={classes.keyLabel} to={`${match.url}?e=${_id}`}>{_id}</Link></p>} secondary={<span>name: {name}<br/>read: {JSON.stringify(read)}<br/>write: {JSON.stringify(write)}</span>} />
                       <ListItemSecondaryAction>
                         <IconButton aria-label="Delete" onClick={()=>onDeleteKeyClick(_id)}>
                           <DeleteIcon />
@@ -106,9 +106,10 @@ class KeyEditor extends Component{
             _id={editedKey} 
             read={editedToken.read} 
             write={editedToken.write}
+            name={editedToken.name}
             ok={
-              (_id, read, write) => {
-                onKeyEditorOkClick(_id, read, write, history);
+              (_id, read, write, name) => {
+                onKeyEditorOkClick(_id, read, write, name, history);
               }
             }
             cancel={
@@ -137,9 +138,9 @@ mapDispatchToProps = (dispatch)=>({
   "onCopyKeyClick" : function(key){
     dispatch(actions.copyKey(key));
   },
-  "onKeyEditorOkClick" : async function(key, read, write, history){
+  "onKeyEditorOkClick" : async function(key, read, write, name, history){
     try {
-    await dispatch(actions.updateKeyAsync(key, read, write));
+      await dispatch(actions.updateKeyAsync(key, read, write, name));
     }
     catch (e){
       console.error(e);

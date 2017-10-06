@@ -33,12 +33,13 @@ const actions = {
     })
   },
 
-  updateKey: function(key, read, write){
+  updateKey: function(key, read, write, name){
     return ({
       type: "UPDATE_KEY",
       key,
       read,
-      write
+      write,
+      name
     })
   },
 
@@ -130,12 +131,12 @@ const actions = {
     }
   },
 
-  updateKeyAsync: function(key, read, write){
+  updateKeyAsync: function(key, read, write, name){
     let self = this;
     return async function(dispatch, getState){
       let updatedKey = null, {currentKey} = getState();
       try {
-        updatedKey = await tokensApi.updateToken(currentKey, key, read, write);
+        updatedKey = await tokensApi.updateToken(currentKey, key, read, write, name);
       }
       catch (e){
         dispatch(notify({message: `Key ${key} cannot be updated due to an error, check console.`, status: "error"}));
@@ -144,7 +145,7 @@ const actions = {
         return;
       }
 
-      dispatch(self.updateKey(key, updatedKey.read, updatedKey.write));
+      dispatch(self.updateKey(key, updatedKey.read, updatedKey.write, name));
       dispatch(notify({message: `Key ${key} updated.`, status: "success"}));      
     }
   },

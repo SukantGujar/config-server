@@ -37,16 +37,16 @@ class KeyEditorDialog extends Component{
       return failed(permission);
     }
   }, 200);
-  updatePermissionState = (permission, type)=>{
-    this.setState({[type] : permission, [`${type}_error`]: false}, this.validatePermission(permission, ()=>{this.setState({[`${type}_error`]: true})}));
+  updateState = (field, type, isPermission = true)=>{
+    this.setState({[type] : field, [`${type}_error`]: false}, isPermission && this.validatePermission(field, ()=>{this.setState({[`${type}_error`]: true})}));
   };
-  renderTypeField = (type, label, classes)=> (
+  renderTypeField = (type, label, classes, isPermission = true)=> (
     <TextField
       id={type}
       label={label}
       className={classes.textField}
       value={this.state[type]}
-      onChange={event => this.updatePermissionState(event.target.value, type)}
+      onChange={event => this.updateState(event.target.value, type, isPermission)}
       margin="normal"
       rowsMax="4"
       error = {this.state[`${type}_error`]}
@@ -64,31 +64,37 @@ class KeyEditorDialog extends Component{
       return;
     }
 
-    const {read, write} = this.state,
+    let {read, write, name = ""} = this.state,
     {_id} = this.props;
-    ok && ok(_id, JSON.parse(read), JSON.parse(write));
+    name = _.trim(name);
+    ok && ok(_id, JSON.parse(read), JSON.parse(write), name);
   };
-  componentWillReceiveProps({read, write}){
+  componentWillReceiveProps({read, write, name = ""}){
     this.setState({
       read : JSON.stringify(read), 
-      write : JSON.stringify(write)
+      write : JSON.stringify(write),
+      read_error : false,
+      write_error: false,
+      name
     });
   }
   constructor(props){
-    const {read, write} = props;
+    const {read, write, name} = props;
     super(props);
     this.state = {
       read : JSON.stringify(read), 
-      write : JSON.stringify(write)
+      write : JSON.stringify(write),
+      name
     }
   }
   render(){
-    const {_id, read, write, cancel = ()=>{}, ok = ()=>{}, classes, ...other} = this.props;
+    const {_id, read, write, name = "", cancel = ()=>{}, ok = ()=>{}, classes, ...other} = this.props;
     return (
       <Dialog {...other}>
         <DialogTitle>Edit permissions for key "{_id}"</DialogTitle>
         <DialogContent>
           <Grid className={classes.container}>
+            {this.renderTypeField("name", "Name", classes, false)}
             {this.renderTypeField("read", "Read", classes)}
             {this.renderTypeField("write", "Write", classes)}
           </Grid>
@@ -110,6 +116,7 @@ KeyEditorDialog.propTypes = {
   _id : PropTypes.string,
   read : PropTypes.array,
   write : PropTypes.array,
+  name : PropTypes.string,
   cancel : PropTypes.func,
   ok : PropTypes.func
 }

@@ -1,5 +1,6 @@
 module.exports = {
   "namespace" : "configserver",
+  "MASTER_TOKEN_NAME" : "Master Token",
   "MASTER_TOKEN_KEY" : "MASTER_TOKEN",
   "TOKENS_KEY" : "configservertokens",
   "CONFIG_KEY" : "configserverconfig",

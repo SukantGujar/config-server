@@ -6,6 +6,7 @@ args = require("minimist")(process.argv.slice(2)),
 db = null,
 {
   TOKENS_KEY, 
+  MASTER_TOKEN_NAME,
   MASTER_TOKEN_KEY, 
   MASTER_READ_FILTER, 
   MASTER_WRITE_FILTER,
@@ -17,8 +18,8 @@ getTokens = ()=>{
   return tokens;
 }
 tokens = {},
-makeTokenInstance = (id, read, write) => ({"_id": id, read, write}),
-getMasterToken = ()=>makeTokenInstance(MASTER_TOKEN, MASTER_READ_FILTER, MASTER_WRITE_FILTER),
+makeTokenInstance = (id, read, write, name) => ({"_id": id, read, write, name}),
+getMasterToken = ()=>makeTokenInstance(MASTER_TOKEN, MASTER_READ_FILTER, MASTER_WRITE_FILTER, MASTER_TOKEN_NAME),
 loadTokens = ()=>{
   return db.collection(TOKENS_KEY)
   .find()
@@ -37,6 +38,7 @@ saveToken = (token, update = false)=>{
   if (update){
     token.read = token.read || oldToken.read;
     token.write = token.write || oldToken.write;
+    token.name = token.name || oldToken.name;
   }
   db.collection(TOKENS_KEY)
   .save(token)
@@ -57,9 +59,9 @@ deleteToken = (tokenKey)=>{
   delete tokens[tokenKey];
   return tokenKey;
 },
-createNewToken = (read = DEFAULT_READ_FILTER, write = DEFAULT_WRITE_FILTER)=>{
+createNewToken = (read = DEFAULT_READ_FILTER, write = DEFAULT_WRITE_FILTER,  name = "")=>{
   const tokenId = crypto.randomBytes(16).toString("hex"),
-  token = makeTokenInstance(tokenId, read, write);
+  token = makeTokenInstance(tokenId, read, write, name);
   return saveToken(token);
 },
 validatePermission = (permission)=>_.isArray(permission) && permission.every(_.isString),

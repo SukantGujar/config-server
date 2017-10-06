@@ -16,7 +16,8 @@ const keys = (state = [], action) => {
           return ({
             _id : item._id,
             read : action.read,
-            write : action.write
+            write : action.write,
+            name : action.name
           })
         }
 
