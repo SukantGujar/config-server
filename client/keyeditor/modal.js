@@ -38,7 +38,7 @@ class KeyEditorDialog extends Component{
     }
   }, 200);
   updateState = (field, type, isPermission = true)=>{
-    this.setState({[type] : field, [`${type}_error`]: false}, isPermission && this.validatePermission(field, ()=>{this.setState({[`${type}_error`]: true})}));
+    this.setState({[type] : field, [`${type}_error`]: false}, ()=> isPermission && this.validatePermission(field, ()=>{this.setState({[`${type}_error`]: true})}));
   };
   renderTypeField = (type, label, classes, isPermission = true)=> (
     <TextField
